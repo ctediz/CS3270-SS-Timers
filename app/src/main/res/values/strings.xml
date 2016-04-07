@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Silent Swamp Timers</string>
+    <string name="local_timers">Local Timers</string>
+    <string name="official_timers">Official Timers</string>
+    <string name="custom_timers">Custom Timers</string>
+
+    <string name="txtDark">Dark</string>
+    <string name="txtGrim">Grim</string>
+    <string name="txtSpawn">Spawned</string>
+
+    <string name="txtUpdate_spawn">Update Map</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txtHotWarm">Hot/Warm</string>
+    <string name="txtMissed">Missed</string>
+    <string name="txtReady">Ready</string>
+    <string name="txtFirst">First List</string>
+    <string name="txtSecond">Second List</string>
+    <string name="txtThird">Third List</string>
+</resources>

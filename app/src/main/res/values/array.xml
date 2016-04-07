@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array
+        name="local_map_change_array">
+        <item>Dark</item>
+        <item>Grim</item>
+        <item>Spawned</item>
+    </array>
+</resources>
