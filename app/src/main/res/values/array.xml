@@ -6,4 +6,16 @@
         <item>Grim</item>
         <item>Spawned</item>
     </array>
+
+    <array name="custom_map_change_array">
+        <item>Ready</item>
+        <item>Soon</item>
+        <item>Missed</item>
+    </array>
+
+    <array name="official_map_change_array">
+        <item>Hot/Warm</item>
+        <item>Missed</item>
+        <item>Grim</item>
+    </array>
 </resources>

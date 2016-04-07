@@ -34,34 +34,30 @@ public class GeneralTimer extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        fragView =  inflater.inflate(R.layout.fragment_local_timers, container, false);
-        Log.d("LocalTimers", "LocalTimers onCreateView");
+        fragView =  inflater.inflate(R.layout.fragment_general_timer, container, false);
+        Log.d("GeneralTimer", "GeneralTimer onCreateView");
 
         createChannels();
         addListViews();
-        addListListeners();
+        //addListListeners();
         linkChannels();
 
         return fragView;
     }
 
+    public View getFragView()
+    {
+        return fragView;
+    }
 
     // creates MapObjects and assigns them into channels array
     protected void createChannels()
     {
-        Log.d("LocalTimers", "createChannels()");
+        Log.d("GeneralTimer", "createChannels()");
         for(int i = 0; i < NUMBER_OF_CHANNELS; i++)
         {
             channels.add(new MapObject(i+1));   // start with 1 based numbering
         }
-
-        /*
-        for(int i = 0; i < NUMBER_OF_CHANNELS; i++)
-        {
-            System.out.println("Channel " + i  + ", " + channels.get(i).getChannel());
-            System.out.println("Time = " + channels.get(i).getDate());
-        }
-        */
     }
 
     protected void addListViews()
@@ -69,6 +65,7 @@ public class GeneralTimer extends Fragment {
         first = (ListView) fragView.findViewById(R.id.lsvFirst);
         second = (ListView) fragView.findViewById(R.id.lsvSecond);
         third = (ListView) fragView.findViewById(R.id.lsvThird);
+
     }
 
     // adds channels to ListView
@@ -86,20 +83,67 @@ public class GeneralTimer extends Fragment {
         third.setAdapter(strAdapter);
     }
 
-    protected void addListListeners()
+    public void listSwap(int position, int list, int toWhich)
+    {
+        ListView toList = (ListView) fragView.findViewById(R.id.lsvThird);   // default
+        switch(list)
+        {
+            case R.id.lsvFirst:
+                toList = (ListView) fragView.findViewById(R.id.lsvFirst);
+                break;
+            case R.id.lsvSecond:
+                toList = (ListView) fragView.findViewById(R.id.lsvSecond);
+                break;
+            case R.id.lsvThird:
+                toList = (ListView) fragView.findViewById(R.id.lsvThird);   // default
+                break;
+            default:
+                Log.d("Error", "GeneralTimer.listSwap, could not determine listId");
+                break;
+        }
+
+        switch(toWhich)
+        {
+            case 0:
+                //R.id.lsvFirst
+                swap(position, toList, first);
+                Log.d("GeneralTimer", "Moving to first List");
+                break;
+            case 1:
+                //R.id.lsvSecond
+                Log.d("GeneralTimer", "Moving to second List");
+                break;
+            case 2:
+                //R.id.lsvThird
+                Log.d("GeneralTimer", "Moving to third List");
+                break;
+            default:
+                Log.d("Error", "GeneralTimer.listSwap, could not determine which list to move to");
+                break;
+        }
+    }
+
+    private void swap(int fromPosition, ListView fromList, ListView toList)
+    {
+
+    }
+
+    protected void addListListeners(final int resource)
     {
         AdapterView.OnItemClickListener listListener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("LocalTimers", "List = " + view.getId());
-                Log.d("LocalTimers", "Position = " + position + "\nID = " + id);
+                Log.d("GeneralTimer", "ListId = " + parent.getId());
+                Log.d("GeneralTimer", "Position = " + position + "\nID = " + id);
+
 
                 MoveMapDialog mmd = new MoveMapDialog();
 
                 // pass arguments to dialog
                 Bundle args = new Bundle();
                 args.putInt("listPosition", position);
-                args.putInt("listID", view.getId());
+                args.putInt("listID", parent.getId());
+                args.putInt("arrayResource", resource);
                 mmd.setArguments(args);
 
                 // bring up dialog
@@ -109,6 +153,7 @@ public class GeneralTimer extends Fragment {
         first.setOnItemClickListener(listListener);
         second.setOnItemClickListener(listListener);
         third.setOnItemClickListener(listListener);
-
     }
+
+
 }

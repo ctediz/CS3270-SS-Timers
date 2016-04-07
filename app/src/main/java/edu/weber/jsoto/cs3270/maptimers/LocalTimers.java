@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,8 +21,8 @@ import java.util.List;
 public class LocalTimers extends GeneralTimer {
     private View fragView;
     private ListView first, second, third;
-    private static final int NUMBER_OF_CHANNELS = 20;
-    private ArrayList<MapObject> channels = new ArrayList<MapObject>(NUMBER_OF_CHANNELS);
+    //private static final int NUMBER_OF_CHANNELS = 20;
+    //private ArrayList<MapObject> channels = new ArrayList<MapObject>(NUMBER_OF_CHANNELS);
 
 
     public LocalTimers() {
@@ -30,17 +31,24 @@ public class LocalTimers extends GeneralTimer {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        fragView =  inflater.inflate(R.layout.fragment_local_timers, container, false);
-        Log.d("LocalTimers", "LocalTimers onCreateView");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //super.onCreateView(inflater, container, savedInstanceState);
+        fragView = super.onCreateView(inflater, container, savedInstanceState);
 
-        createChannels();
-        addListViews();
-        addListListeners();
-        linkChannels();
+        // assign list names
+        addListListeners(R.array.local_map_change_array);
+        nameLists();
 
         return fragView;
+    }
+
+    private void nameLists() {
+        TextView txtFirst = (TextView) fragView.findViewById(R.id.txtFirst);
+        TextView txtSecond = (TextView) fragView.findViewById(R.id.txtSecond);
+        TextView txtThird = (TextView) fragView.findViewById(R.id.txtThird);
+
+        txtFirst.setText(R.string.txtDark);
+        txtSecond.setText(R.string.txtGrim);
+        txtThird.setText(R.string.txtSpawn);
     }
 }

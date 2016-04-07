@@ -58,24 +58,18 @@ public class MainActivity extends AppCompatActivity {
     public void moveMap(int position, int list, int toWhich)
     {
         // get currently active time sheet
-        getSupportFragmentManager().findFragmentById(R.id.flMainScreen);
+        GeneralTimer gt = (LocalTimers) getSupportFragmentManager().findFragmentById(R.id.flMainScreen);
+        Log.d("MainActivity", "Moving maps");
 
-        // call appropriate moveMethod
-            // inherit a general timer maybe??
-        // listSwap(Map, List1, List2)
-            // LocalTimers.listSwap
-            // customTimers.listSwap
-            // etc
-
-        //
-
+        // move maps
+        gt.listSwap(position, list, toWhich);
     }
 
     private void addFragments()
     {
         Log.d("MainActivity", "addFragments()");
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.flMainScreen, new GeneralTimerTest(), "LT")
+                .add(R.id.flMainScreen, new LocalTimers(), "LT")
                 .commit();
     }
 }
