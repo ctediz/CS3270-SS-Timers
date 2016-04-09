@@ -42,6 +42,9 @@ public class LocalTimers extends GeneralTimer {
         return fragView;
     }
 
+    /**
+     * Wires up TextViews and assigns them to appropriate string resource.
+     */
     private void nameLists() {
         TextView txtFirst = (TextView) fragView.findViewById(R.id.txtFirst);
         TextView txtSecond = (TextView) fragView.findViewById(R.id.txtSecond);

@@ -1,8 +1,10 @@
 package edu.weber.jsoto.cs3270.maptimers;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,8 +20,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        addFragments();
     }
 
     @Override
@@ -55,6 +55,47 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        // Get current fragment
+        Fragment displayed = getSupportFragmentManager().findFragmentById(R.id.flMainScreen);
+
+        // Determine fragment being displayed
+        if(displayed == getSupportFragmentManager().findFragmentByTag("LT"))
+        {
+            editor.putString("Displayed", "LT");
+        }
+        else if(displayed == getSupportFragmentManager().findFragmentByTag("CT"))
+        {
+            editor.putString("Displayed", "CT");
+        }
+        else if(displayed == getSupportFragmentManager().findFragmentByTag("OT"))
+        {
+            editor.putString("Displayed", "OT");
+        }
+
+        // Remove current fragment
+        getSupportFragmentManager().beginTransaction()
+                .remove(displayed)
+                .commit();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        addFragments();
+    }
+
+    /**
+     * Calls GeneralTimer's listSwap function.
+     * @param position  Position in list of item to be moved.
+     * @param list      ID of list which contains item being moved.
+     * @param toWhich   Index of ListView to recieve item being moved.
+     */
     public void moveMap(int position, int list, int toWhich)
     {
         // get currently active time sheet
@@ -68,8 +109,23 @@ public class MainActivity extends AppCompatActivity {
     private void addFragments()
     {
         Log.d("MainActivity", "addFragments()");
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.flMainScreen, new LocalTimers(), "LT")
-                .commit();
+        SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+        String displayed = prefs.getString("Displayed", "none");
+
+        if(displayed.equals("none") || displayed.equals("LT")) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.flMainScreen, new LocalTimers(), "LT")
+                    .commit();
+        }
+        else if(displayed.equals("OT")) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.flMainScreen, new LocalTimers(), "OT")
+                    .commit();
+        }
+        else if(displayed.equals("CT")) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.flMainScreen, new LocalTimers(), "CT")
+                    .commit();
+        }
     }
 }
