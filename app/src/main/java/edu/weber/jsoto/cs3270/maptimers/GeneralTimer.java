@@ -13,14 +13,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
 import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class GeneralTimer extends Fragment {
     private View fragView;
     private ListView first, second, third;
@@ -50,20 +51,62 @@ public class GeneralTimer extends Fragment {
         return fragView;
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
+        clearListViews();
+        Log.d("GeneralTimer", "onResume");
+
+        GsonBuilder gsonB = new GsonBuilder();
+        Gson gson = gsonB.create();
+        MapObject[] mo = null;
+        ArrayList<MapObject> mapAL = new ArrayList<MapObject>();
+        String holder;
+        SharedPreferences prefs = getActivity().getPreferences(FragmentActivity.MODE_PRIVATE);
+
+        Type listType = new TypeToken<ArrayList<MapObject>>() {
+        }.getType();
+
+        holder = prefs.getString("first", "");
+        Log.d("GeneralTimer", "Grabbing first list\n\t" + holder);
+
+        if(!holder.equals("")) {
+            mapAL = gson.fromJson(holder, listType);
+            channelsFirst = mapAL;
+        }
+
+        holder = prefs.getString("second", "");
+        Log.d("GeneralTimer", "Grabbing second list\n\t" + holder);
+        if(!holder.equals("")){
+            mapAL = gson.fromJson(holder, listType);
+            channelsSecond = mapAL;
+        }
+
+        holder = prefs.getString("third", "");
+        Log.d("GeneralTimer", "Grabbing third list\n\t" + holder);
+        if(!holder.equals("")){
+            mapAL = gson.fromJson(holder, listType);
+            channelsThird = mapAL;
+        }
 
         // Display ListViews
-        //displayChannels();
+        displayChannels();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        Log.d("GeneralTimer", "onPause");
+
+        // Create Json for each item in ListView
+        storeListView();
 
         // Clear ListViews
         clearListViews();
+
+        // trim channels
+        trimChannels();
     }
 
     public View getFragView()
@@ -81,16 +124,13 @@ public class GeneralTimer extends Fragment {
         displayChannels(channelsThird);
     }
 
-
-
     /**
      * Used to set up private swap() function.
      * @param position  Position in the fromList ListView to be moved.
      * @param fromList  The ListView ID which contains the MapObject.
      * @param toWhich   The list number to be moved to.
      */
-    public void listSwap(int position, int fromList, int toWhich)
-    {
+    public void listSwap(int position, int fromList, int toWhich) {
         Log.d("GeneralTimer", "listSwap, \nposition = " + position +
                 "\nfromList = " + fromList + "\ntoWhich = " + toWhich);
 
@@ -175,6 +215,7 @@ public class GeneralTimer extends Fragment {
             return;
 
         MapObject temp = fromArray.get(fromPosition);
+        temp.updateTime();  // Update time when swapped
 
         fromArray.remove(fromPosition);
         toArray.add(temp);
@@ -239,5 +280,36 @@ public class GeneralTimer extends Fragment {
         first.setAdapter(null);
         second.setAdapter(null);
         third.setAdapter(null);
+    }
+
+    private void storeListView()
+    {
+        trimChannels();
+
+        GsonBuilder gsonB = new GsonBuilder();
+        Gson gson = gsonB.create();
+
+        SharedPreferences prefs = getActivity().getPreferences(FragmentActivity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+
+        // Convert to Json Arrays strings
+        String first = gson.toJson(channelsFirst);
+        String second = gson.toJson(channelsSecond);
+        String third = gson.toJson(channelsThird);
+        Log.d("GeneralTimer", "Storing:\n\t" + first + "\n\t" + second + "\n\t" + third);
+
+        // Store Json array strings
+        editor.putString("first", first);
+        editor.putString("second", second);
+        editor.putString("third", third);
+        editor.apply();
+    }
+
+    private void trimChannels()
+    {
+        channelsFirst.trimToSize();
+        channelsSecond.trimToSize();
+        channelsThird.trimToSize();
     }
 }

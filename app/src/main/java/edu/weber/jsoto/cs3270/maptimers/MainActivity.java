@@ -17,9 +17,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("MainActivity", "onCreate");
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //addFragments();
     }
 
     @Override
@@ -67,14 +69,17 @@ public class MainActivity extends AppCompatActivity {
         // Determine fragment being displayed
         if(displayed == getSupportFragmentManager().findFragmentByTag("LT"))
         {
+            Log.d("MainActivity", "onPause LT");
             editor.putString("Displayed", "LT");
         }
         else if(displayed == getSupportFragmentManager().findFragmentByTag("CT"))
         {
+            Log.d("MainActivity", "onPause CT");
             editor.putString("Displayed", "CT");
         }
         else if(displayed == getSupportFragmentManager().findFragmentByTag("OT"))
         {
+            Log.d("MainActivity", "onPause OT");
             editor.putString("Displayed", "OT");
         }
 
@@ -87,7 +92,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d("MainActivity", "onStart");
         addFragments();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("MainActivity", "onResume");
+        //addFragments();
     }
 
     /**
