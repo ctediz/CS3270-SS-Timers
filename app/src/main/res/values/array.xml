@@ -15,7 +15,7 @@
 
     <array name="official_map_change_array">
         <item>Hot/Warm</item>
-        <item>Missed</item>
         <item>Grim</item>
+        <item>Missed</item>
     </array>
 </resources>

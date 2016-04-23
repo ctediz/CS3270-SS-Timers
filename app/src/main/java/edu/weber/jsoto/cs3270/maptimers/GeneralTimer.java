@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 public class GeneralTimer extends Fragment {
     private View fragView;
     private ListView first, second, third;
-    private static final int NUMBER_OF_CHANNELS = 20;
+    protected static final int NUMBER_OF_CHANNELS = 20;
     //private ArrayList<ArrayList> lists = new ArrayList<ArrayList>(NUMBER_OF_STATES);
     private ArrayList<MapObject> channelsFirst = new ArrayList<MapObject>();
     private ArrayList<MapObject> channelsSecond = new ArrayList<MapObject>();
@@ -43,14 +44,17 @@ public class GeneralTimer extends Fragment {
         fragView =  inflater.inflate(R.layout.fragment_general_timer, container, false);
         Log.d("GeneralTimer", "GeneralTimer onCreateView");
 
-        createChannels();
+        //createChannels();
         addListViews();
         //addListListeners();
         displayChannels();
 
+        // start timers
+
         return fragView;
     }
 
+    /**
 
     @Override
     public void onResume() {
@@ -108,10 +112,49 @@ public class GeneralTimer extends Fragment {
         // trim channels
         trimChannels();
     }
+    */
 
-    public View getFragView()
+    public ArrayList<MapObject> getFirstChannel()
+    {
+        return channelsFirst;
+    }
+
+    public ArrayList<MapObject> getSecondChannel()
+    {
+        return channelsSecond;
+    }
+
+    public ArrayList<MapObject> getThirdChannel()
+    {
+        return channelsThird;
+    }
+
+
+    public void nameLists(int first, int second, int third)
+    {
+        TextView txtFirst = (TextView) fragView.findViewById(R.id.txtFirst);
+        TextView txtSecond = (TextView) fragView.findViewById(R.id.txtSecond);
+        TextView txtThird = (TextView) fragView.findViewById(R.id.txtThird);
+
+        txtFirst.setText(first);
+        txtSecond.setText(second);
+        txtThird.setText(third);
+    }
+
+    /*public View getFragView()
     {
         return fragView;
+    }*/
+
+    /**
+     * Used to display all channel array lists by calling the private displayChannels()
+     */
+    public void displayChannels(ArrayList<MapObject> first, ArrayList<MapObject> second, ArrayList<MapObject> third)
+    {
+        Log.d("GeneralTimer", "overloaded displayChannels\n" + first.size() + "\n" + second.size() + "\n" + third.size());
+        displayChannels(first);
+        displayChannels(second);
+        displayChannels(third);
     }
 
     /**
@@ -230,7 +273,7 @@ public class GeneralTimer extends Fragment {
      */
     private void displayChannels(ArrayList<MapObject> channel)
     {
-        Log.d("GeneralTimer", "channel size = " + channel.size());
+        Log.d("GeneralTimer", "displayChannels\n\tchannel size = " + channel.size());
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
         ArrayList<String> strAL = new ArrayList<String>();
 
@@ -247,6 +290,7 @@ public class GeneralTimer extends Fragment {
             second.setAdapter(strAdapter);
         else if(channel.equals(channelsThird))
             third.setAdapter(strAdapter);
+
 
     }
 
@@ -275,14 +319,14 @@ public class GeneralTimer extends Fragment {
         }
     }
 
-    private void clearListViews()
+    public void clearListViews()
     {
         first.setAdapter(null);
         second.setAdapter(null);
         third.setAdapter(null);
     }
 
-    private void storeListView()
+    public void storeListView()
     {
         trimChannels();
 
@@ -306,10 +350,17 @@ public class GeneralTimer extends Fragment {
         editor.apply();
     }
 
-    private void trimChannels()
+    public void trimChannels()
     {
         channelsFirst.trimToSize();
         channelsSecond.trimToSize();
         channelsThird.trimToSize();
+    }
+
+    public void setChannels(ArrayList<MapObject> first, ArrayList<MapObject> second, ArrayList<MapObject> third)
+    {
+        channelsFirst = first;
+        channelsSecond = second;
+        channelsThird = third;
     }
 }

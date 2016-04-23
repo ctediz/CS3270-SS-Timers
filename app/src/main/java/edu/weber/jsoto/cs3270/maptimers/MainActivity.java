@@ -22,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         //addFragments();
+        System.out.println("Spreadsheet stuff");
+        //new MySpreadsheetIntegration();
     }
 
     @Override
@@ -41,16 +43,25 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.official_timers) {
             // load official_timers if not loaded
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.flMainScreen, new OfficialTimers(), "OT")
+                    .commit();
             return true;
         }
         else if(id == R.id.custom_timers)
         {
             // load custom_timers if not loaded
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.flMainScreen, new CustomTimers(), "CT")
+                    .commit();
             return true;
         }
         else if(id == R.id.local_timers)
         {
             // load local_timers if not loaded
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.flMainScreen, new LocalTimers(), "LT")
+                    .commit();
             return true;
         }
 
@@ -93,14 +104,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         Log.d("MainActivity", "onStart");
-        addFragments();
+        //addFragments();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         Log.d("MainActivity", "onResume");
-        //addFragments();
+        addFragments();
     }
 
     /**
@@ -111,8 +122,25 @@ public class MainActivity extends AppCompatActivity {
      */
     public void moveMap(int position, int list, int toWhich)
     {
+        // Get current fragment
+        Fragment displayed = getSupportFragmentManager().findFragmentById(R.id.flMainScreen);
+        GeneralTimer gt = null;
+
+        // Determine fragment being displayed
+        if(displayed == getSupportFragmentManager().findFragmentByTag("LT"))
+        {
+            gt = (LocalTimers) getSupportFragmentManager().findFragmentById(R.id.flMainScreen);
+        }
+        else if(displayed == getSupportFragmentManager().findFragmentByTag("CT"))
+        {
+            gt = (CustomTimers) getSupportFragmentManager().findFragmentById(R.id.flMainScreen);
+        }
+        else if(displayed == getSupportFragmentManager().findFragmentByTag("OT"))
+        {
+            gt = (OfficialTimers) getSupportFragmentManager().findFragmentById(R.id.flMainScreen);
+        }
+
         // get currently active time sheet
-        GeneralTimer gt = (LocalTimers) getSupportFragmentManager().findFragmentById(R.id.flMainScreen);
         Log.d("MainActivity", "Moving maps");
 
         // move maps
