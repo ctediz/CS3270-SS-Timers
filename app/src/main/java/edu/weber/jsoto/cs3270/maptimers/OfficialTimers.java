@@ -46,6 +46,7 @@ public class OfficialTimers extends GeneralTimer {
     private ArrayList<MapObject> firstChannel, secondChannel, thirdChannel;
     private static final int OFFSET = 1;    // TimeZone offset
     private Timer updateTimer;
+    private AsyncTask asyncUpdate;
 
     public OfficialTimers() {
         // Required empty public constructor
@@ -64,7 +65,9 @@ public class OfficialTimers extends GeneralTimer {
     @Override
     public void onPause() {
         super.onPause();
+        Log.d("OfficialTimers", "onPause");
         updateTimer.cancel();
+        asyncUpdate.cancel(true);
 
     }
 
@@ -196,13 +199,14 @@ public class OfficialTimers extends GeneralTimer {
         thirdChannel = new ArrayList<MapObject>(); //= getThirdChannel();
 
         //startTimer();
-        new runAsync().execute("");
+        asyncUpdate = new runAsync().execute("");
     }
 
     private void startTimer()
     {
         int minutes = 5;
-        startTimer(minutes * 60000L);
+        //startTimer(minutes * 60000L);
+        startTimer(1 * 5000L);  // 5 seconds
     }
 
     private void startTimer(long counter) {

@@ -21,9 +21,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //addFragments();
-        System.out.println("Spreadsheet stuff");
-        //new MySpreadsheetIntegration();
     }
 
     @Override
@@ -43,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.official_timers) {
             // load official_timers if not loaded
+            Log.d("MainActivity", "swapping to OfficialTimers");
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.flMainScreen, new OfficialTimers(), "OT")
                     .commit();
@@ -51,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         else if(id == R.id.custom_timers)
         {
             // load custom_timers if not loaded
+            Log.d("MainActivity", "Swapping to CustomTimers");
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.flMainScreen, new CustomTimers(), "CT")
                     .commit();
@@ -59,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         else if(id == R.id.local_timers)
         {
             // load local_timers if not loaded
+            Log.d("MainActivity", "Swapping to LocalTimers");
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.flMainScreen, new LocalTimers(), "LT")
                     .commit();
