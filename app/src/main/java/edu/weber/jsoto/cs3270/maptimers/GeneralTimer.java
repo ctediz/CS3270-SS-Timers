@@ -141,10 +141,6 @@ public class GeneralTimer extends Fragment {
         txtThird.setText(third);
     }
 
-    /*public View getFragView()
-    {
-        return fragView;
-    }*/
 
     /**
      * Used to display all channel array lists by calling the private displayChannels()
